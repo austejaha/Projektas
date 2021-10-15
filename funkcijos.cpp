@@ -24,9 +24,9 @@ void nuskaitymas(vector <studentas> &St)
 {
     stringstream buffer;
     ifstream duom;
-    try{ //tikrina
+    try{ 
     duom.open("kursiokai.txt");
-    if(!duom) throw 1; //jei nera studenu ismeta is programos
+    if(!duom) throw 1; 
     buffer << duom.rdbuf();
     duom.close();
     string eil;
@@ -50,7 +50,7 @@ void nuskaitymas(vector <studentas> &St)
         St.push_back(S);
         S.nd.clear();
     }
-    }catch (int e) //erroro skaicius
+    }catch (int e) 
     {
         switch(e)
         {
