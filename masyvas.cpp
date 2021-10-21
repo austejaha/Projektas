@@ -85,11 +85,10 @@ void pagalbine(studentas *St, int &ilgis)
         cout << "Ar norite ivesti pazymiu kieki ? (t/n) ";
         if(patvirtinimas())
         {
-            int n = skIvedimas("pazymiu kieki", false); //false - tikrina tik ar sk > 0
-
+            int n = skIvedimas("pazymiu kieki", false); 
             for(int j = 0; j < n; j++)
             {
-                St[ilgis].nd[j] = skIvedimas("pazymi", true); //true - tikrina intervala
+                St[ilgis].nd[j] = skIvedimas("pazymi", true); 
             }
         }
         else
@@ -238,7 +237,7 @@ bool skTikrinimas(string laik)
             cout << "Klaida! Turite ivesti skaiciu" << endl;
             break;
         }
-        else if (teisingas == true && (stoi(laik) < 1 || stoi(laik) > 10)) //true - kad tikrintu intervala
+        else if (teisingas == true && (stoi(laik) < 1 || stoi(laik) > 10)) 
         {
             teisingas = false;
             cout << "Klaida! Skaicius turi is intervalo [1-10]" << endl;
@@ -249,18 +248,18 @@ bool skTikrinimas(string laik)
     return teisingas;
 }
 
-int skIvedimas(string ivedimas, bool tarpinis) //false - tikrina tik ar sk > 0. true - intervalas
+int skIvedimas(string ivedimas, bool tarpinis) 
 {
     string kint;
     bool laik;
 
     do 
     {
-        cout << "Iveskite " << ivedimas << ": "; //ivest arba kieki, pazymi
+        cout << "Iveskite " << ivedimas << ": "; 
         cin >> kint;
-        if(tarpinis)laik = skTikrinimas(kint); //pagal default tarpinis - true,  eina i f-ija ir grazina, jei laik false - vykdo is naujo
+        if(tarpinis)laik = skTikrinimas(kint); 
         else laik = skKiekioTikrinimas(kint);
-    } while (!laik); //jei false tada vykdo is naujo nes neteisingai ivesta
+    } while (!laik); 
 
     int skaicius = stoi(kint);
 
