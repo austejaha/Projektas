@@ -22,10 +22,10 @@ struct studentas
 {
     string vard;
     string pavard;
-    int nd[1000];
     int egz;
     float glt;
     int n;
+    int *nd = new int[n];
 };
 
 //tikrina ar ivesta varda/pavarde sudaro tik raides
@@ -39,37 +39,38 @@ bool skTikrinimas(string laik);
 //ivedami duomenis, jei neteisingi - prasoma ivesti is naujo
 int skIvedimas(string ivedimas, bool);
 //skaiciuoja suma
-int suma(int nd[], int n);
+int suma(int *nd, int n);
 //skaiciuoja vidurki
-float vidurkis(int nd[], int n);
+float vidurkis(int *nd, int n);
 //skaiciuoja mediana
-float mediana(int nd[], int n);
+float mediana(int *nd, int n);
 //skaiciuoja galutini bala
 float galutinis(float, int egz);
 //sugeneruoja atsitiktinius duomenis
 int atsitiktiniai();
 //randa ilgiausia studento pavarde
-int ilgPavarde(studentas St[], int ilgis);
+int ilgPavarde(studentas *St, int ilgis);
 //randa ilgiausia studento varda
-int ilgVardas(studentas St[], int ilgis);
+int ilgVardas(studentas *St, int ilgis);
 //duomenu spausdinimui skirta funkcija
-void spausdinimas(studentas St[], int ilgis);
+void spausdinimas(studentas *St, int ilgis);
 //pagalbine funkcija
-void pagalbine(studentas St[], int &ilgis);
+void pagalbine(studentas *St, int &ilgis);
 //tikrina pasirinkima (t/n) - taip/ne
 bool patvirtinimas();
 
 int main()
 {
-    studentas St[100];
+    studentas *St = new studentas [100];
     int ilgis = 0;
     srand(time(0));
     pagalbine(St, ilgis);
     spausdinimas(St, ilgis);
+    delete[] St;
  
 }
 
-void pagalbine(studentas St[], int &ilgis)
+void pagalbine(studentas *St, int &ilgis)
 {
     ilgis;
     int n;
@@ -81,14 +82,14 @@ void pagalbine(studentas St[], int &ilgis)
         cout << "Ar norite pazymius ivesti patys (kitu atveju jie bus sugeneruoti atsitiktinai)? (t/n) ";
         if(patvirtinimas())
         {
-        cout << "Ar norite ivesti pazymiu kieki (t/n)? ";
+        cout << "Ar norite ivesti pazymiu kieki ? (t/n) ";
         if(patvirtinimas())
         {
-            int n = skIvedimas("pazymiu kieki", false);
+            int n = skIvedimas("pazymiu kieki", false); //false - tikrina tik ar sk > 0
 
             for(int j = 0; j < n; j++)
             {
-                St[ilgis].nd[j] = skIvedimas("pazymi", true);
+                St[ilgis].nd[j] = skIvedimas("pazymi", true); //true - tikrina intervala
             }
         }
         else
@@ -98,8 +99,8 @@ void pagalbine(studentas St[], int &ilgis)
             do
             {
                 St[ilgis].nd[n] = skIvedimas("pazymi", true);
-                cout << "Ar norite ivesti dar viena pazymi (t/n)? ";
-                n++;
+                cout << "Ar norite ivesti dar viena pazymi (t/n)? "; 
+                n++; 
             } while(patvirtinimas());
             
         }  
@@ -108,7 +109,7 @@ void pagalbine(studentas St[], int &ilgis)
         {
             n = skIvedimas("pazymiu kieki", false);
 
-            for (int j = 0; j < n; j++) St[ilgis].nd[j] = atsitiktiniai();
+            for (int j = 0; j < n; j++) St[ilgis].nd[j] = atsitiktiniai(); 
             cout << "Atsitiktinai sugeneruoti pazymiai: ";
 
             for (int j = 0; j < n - 1; j++) cout << St[ilgis].nd[j] << ", ";
@@ -127,9 +128,9 @@ void pagalbine(studentas St[], int &ilgis)
 
         }
         St[ilgis].glt = 0;
-        St[ilgis].n = n;
+        St[ilgis].n = n; 
         cout << "Ar norite ivesti dar vieno studento duomenis? (t/n) ";
-        ilgis++;
+        ilgis++; 
     } while(patvirtinimas());
 
     cout << "Ar norite apskaiciuoti vidurki (kitu atveju bus skaiciuojama mediana)? (t/n) ";
@@ -162,7 +163,7 @@ bool patvirtinimas()
         cin >> tn;
         if(tn.length() == 1 && (tolower(tn[0]) == 't' || tolower(tn[0]) == 'n'))
         {
-            laik = true;
+            laik = true; 
             if(tolower(tn[0]) == 't' )
             tiesa = true;
             else tiesa = false;
@@ -214,7 +215,7 @@ bool skKiekioTikrinimas(string laik)
 
     for (int i = 0; i < laik.length(); i++) 
     {
-        if (!isdigit(laik[i]) || stoi(laik) == 0)
+        if (!isdigit(laik[i]) || stoi(laik) == 0) 
         {
             teisingas = false;
             cout << "Klaida! Turite ivesti skaiciu (didesni uz nuli)"<<endl;
@@ -237,7 +238,7 @@ bool skTikrinimas(string laik)
             cout << "Klaida! Turite ivesti skaiciu" << endl;
             break;
         }
-        else if (teisingas == true && (stoi(laik) < 1 || stoi(laik) > 10))
+        else if (teisingas == true && (stoi(laik) < 1 || stoi(laik) > 10)) //true - kad tikrintu intervala
         {
             teisingas = false;
             cout << "Klaida! Skaicius turi is intervalo [1-10]" << endl;
@@ -248,25 +249,25 @@ bool skTikrinimas(string laik)
     return teisingas;
 }
 
-int skIvedimas(string ivedimas, bool tarpinis)
+int skIvedimas(string ivedimas, bool tarpinis) //false - tikrina tik ar sk > 0. true - intervalas
 {
     string kint;
     bool laik;
 
     do 
     {
-        cout << "Iveskite " << ivedimas << ": ";
+        cout << "Iveskite " << ivedimas << ": "; //ivest arba kieki, pazymi
         cin >> kint;
-        if(tarpinis)laik = skTikrinimas(kint);
+        if(tarpinis)laik = skTikrinimas(kint); //pagal default tarpinis - true,  eina i f-ija ir grazina, jei laik false - vykdo is naujo
         else laik = skKiekioTikrinimas(kint);
-    } while (!laik);
+    } while (!laik); //jei false tada vykdo is naujo nes neteisingai ivesta
 
     int skaicius = stoi(kint);
 
     return skaicius;
 }
 
-int suma(int nd[], int n) 
+int suma(int *nd, int n) 
 {
     int sum = 0;
 
@@ -278,7 +279,7 @@ int suma(int nd[], int n)
     return sum;
 }
 
-float vidurkis(int nd[], int n)
+float vidurkis(int *nd, int n)
 {
 
     float vid = suma(nd, n) / n;
@@ -286,7 +287,7 @@ float vidurkis(int nd[], int n)
     return vid;
 }
 
-float mediana(int nd[], int n)
+float mediana(int *nd, int n)
 {
     float median;
 
@@ -310,11 +311,11 @@ float galutinis(float sum, int egz)
 int atsitiktiniai()
 {
     int paz;
-    paz = 1 + rand() % ((10 + 1) - 1);
+    paz = 1 + rand() % ((10 + 1) - 1); 
     return paz;
 }
 
-int ilgPavarde(studentas St[], int ilgis)
+int ilgPavarde(studentas *St, int ilgis)
 {
     int max = 0;
     
@@ -327,7 +328,7 @@ int ilgPavarde(studentas St[], int ilgis)
     return max;
 }
 
-int ilgVardas(studentas St[], int ilgis)
+int ilgVardas(studentas *St, int ilgis)
 {
     int max = 0;
     
@@ -341,12 +342,12 @@ int ilgVardas(studentas St[], int ilgis)
 }
 
 
-void spausdinimas(studentas St[], int ilgis)
+void spausdinimas(studentas *St, int ilgis)
 {
     string pnktr = "";
     int maxpavard = ilgPavarde(St, ilgis);
     int maxvard = ilgVardas(St, ilgis);
-    pnktr.append(maxpavard + maxvard + 30, '-'); 
+    pnktr.append(maxpavard + maxvard + 30, '-');  
     cout << left << setw(maxpavard + 10) << "Pavarde" << setw(maxvard + 10) << "Vardas" << "Galutinis" << endl; 
     cout << pnktr << endl;
 
